@@ -14,7 +14,7 @@
     <center>
         <BorderPane>
             <center>
-                <SceneView fx:id="sceneView"/>
+                <StackPane fx:id="mapPlaceholder"/>
             </center>
             <bottom>
                 <HBox>
