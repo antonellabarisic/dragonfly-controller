@@ -29,6 +29,12 @@ RUN source /opt/ros/melodic/setup.bash && \
     catkin_make && \
     catkin_make install
 
+RUN echo "source /opt/ros/melodic/setup.bash" >> /root/.bashrc
+RUN echo "source /workspace/devel/setup.bash" >> /root/.bashrc
+RUN echo "alias re-source='source ~/.bashrc'" >> /root/.bashrc
+RUN echo "export ROS_MASTER_URI=http://172.18.0.2:11311" >> /root/.bashrc
+
+
 # Setup Entrypoint
 COPY ./docker/entrypoint.sh /
 ENTRYPOINT ["/entrypoint.sh"]
