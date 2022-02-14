@@ -13,6 +13,7 @@ from mavros_msgs.msg import ParamValue
 from sensor_msgs.msg import NavSatFix
 from std_msgs.msg import String
 from rospy import ROSInterruptException
+from geometry_msgs.msg import Point, Quaternion
 
 from actions import *
 from waypointUtil import *
@@ -37,6 +38,10 @@ class DragonflyCommand:
         self.local_position = None
         self.localposition = None
         self.orientation = None
+
+        self.focusPoint = Point()
+        self.focusPoint.x = 0.0
+        self.focusPoint.y = 0.0
 
     def setmode(self, mode):
         print("Set Mode {}".format(mode))
@@ -124,11 +129,19 @@ class DragonflyCommand:
 
         localWaypoints = []
         for localwaypoint in ddsaWaypoints:
+
+            delta_y = self.focusPoint.y -(startingWaypoint.y + localwaypoint.y)
+            delta_x = self.focusPoint.x -(startingWaypoint.x + localwaypoint.x)
+            yaw_new = math.atan2(delta_y, delta_x)  #radians
+
+            orientation_new = Quaternion()
+            orientation_new = get_quaternion_from_euler(0.0, 0.0, yaw_new)
+
             localWaypoints.append(createWaypoint(
                 startingWaypoint.x + localwaypoint.x,
                 startingWaypoint.y + localwaypoint.y,
                 altitude + localwaypoint.z,
-                orientation
+                orientation_new
             ))
 
         return localWaypoints
