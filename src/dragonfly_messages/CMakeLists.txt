@@ -59,6 +59,7 @@ add_message_files(
     LawnmowerMission.msg
     MissionStep.msg
     NavigationMission.msg
+    NavigationRequest.msg
     Semaphore.msg
     SemaphoreToken.msg
     Sleep.msg
