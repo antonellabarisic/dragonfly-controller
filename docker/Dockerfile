@@ -1,5 +1,7 @@
 # FROM ros:melodic
-FROM nvidia/cuda:11.4.2-cudnn8-runtime-ubuntu18.04
+#FROM nvidia/cuda:11.4.2-cudnn8-runtime-ubuntu18.04
+FROM nvidia/cuda:11.4.0-cudnn8-devel-ubuntu18.04
+
 
 ENV DEBIAN_FRONTEND noninteractive
 ENV WORKSPACE=/workspace
@@ -58,6 +60,10 @@ COPY . $WORKSPACE
 
 RUN cd $WORKSPACE && rm -rf docker build devel && \
 	rm -rf src/dragonfly_dashboard src/dragonfly_messages_java
+
+RUN cd $WORKSPACE && git clone https://github.com/AlexeyAB/darknet.git 
+RUN cd $WORKSPACE/darknet && make GPU=1 CUDNN=1 CUDNNHALF=1 OPENCV=1 && \
+    wget https://github.com/AlexeyAB/darknet/releases/download/darknet_yolo_v3_optimal/yolov4.weights
 
 RUN source /opt/ros/melodic/setup.bash && \
 	cd $WORKSPACE && \
