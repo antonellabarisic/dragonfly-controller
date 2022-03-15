@@ -62,13 +62,12 @@ RUN cd $WORKSPACE && rm -rf docker build devel && \
 	rm -rf src/dragonfly_dashboard src/dragonfly_messages_java
 
 RUN cd $WORKSPACE && git clone https://github.com/AlexeyAB/darknet.git 
-RUN cd $WORKSPACE/darknet && make GPU=1 CUDNN=1 CUDNNHALF=1 OPENCV=1 && \
+RUN cd $WORKSPACE/darknet && make GPU=1 CUDNN=1 CUDNNHALF=0 OPENCV=1 LIBSO=1 && \
     wget https://github.com/AlexeyAB/darknet/releases/download/darknet_yolo_v3_optimal/yolov4.weights
 
 RUN source /opt/ros/melodic/setup.bash && \
 	cd $WORKSPACE && \
-    catkin_make && \
-    catkin_make install
+    catkin build
 
 RUN echo "source /opt/ros/melodic/setup.bash" >> /root/.bashrc
 RUN echo "source /workspace/devel/setup.bash" >> /root/.bashrc
